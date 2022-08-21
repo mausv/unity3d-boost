@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,17 +14,35 @@ public class CollisionHandler : MonoBehaviour
     AudioSource audioSource;
 
     bool isTransitioning = false;
+    bool collisionDisabled = false;
 
-    void Start() 
+    void Start()
     {
         audioSource = GetComponent<AudioSource>();
     }
 
+    void Update()
+    {
+        RespondToDebugKeys();
+    }
+
+    private void RespondToDebugKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextLevel();
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            collisionDisabled = !collisionDisabled;
+        }
+    }
+
     void OnCollisionEnter(Collision other)
     {
-        if (isTransitioning) return;
+        if (isTransitioning || collisionDisabled) return;
 
-        switch(other.gameObject.tag)
+        switch (other.gameObject.tag)
         {
             case "Finish":
                 Debug.Log("Finished!");
@@ -49,7 +68,7 @@ public class CollisionHandler : MonoBehaviour
         Invoke("ReloadLevel", delayBeforeAction);
     }
 
-    void ReloadLevel() 
+    void ReloadLevel()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex);
@@ -66,7 +85,7 @@ public class CollisionHandler : MonoBehaviour
         Invoke("LoadNextLevel", delayBeforeAction);
     }
 
-    void LoadNextLevel() 
+    void LoadNextLevel()
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         int nextSceneIdx = currentSceneIndex + 1;
