@@ -62,13 +62,13 @@ public class Movement : MonoBehaviour
     private void RotateRight()
     {
         ApplyRotation(Vector3.back);
-        if (!leftThrustParticles.isPlaying) leftThrustParticles.Play();
+        if (!rightThrustParticles.isPlaying) rightThrustParticles.Play();
     }
 
     private void RotateLeft()
     {
         ApplyRotation(Vector3.forward);
-        if (!rightThrustParticles.isPlaying) rightThrustParticles.Play();
+        if (!leftThrustParticles.isPlaying) leftThrustParticles.Play();
     }
 
     private void StopRotating()
