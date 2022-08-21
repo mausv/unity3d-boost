@@ -4,7 +4,17 @@ using UnityEngine.SceneManagement;
 public class CollisionHandler : MonoBehaviour
 {
     [SerializeField] float delayBeforeAction = 1.0f;
-    void OnCollisionEnter(Collision other) 
+    [SerializeField] AudioClip rocketCrash;
+    [SerializeField] AudioClip landingSuccess;
+
+    AudioSource audioSource;
+
+    void Start() 
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
+    void OnCollisionEnter(Collision other)
     {
         switch(other.gameObject.tag)
         {
@@ -16,7 +26,6 @@ public class CollisionHandler : MonoBehaviour
                 Debug.Log("Friendly!");
                 break;
             default:
-                Debug.Log("Nothing to report");
                 StartCrashSequence();
                 break;
         }
@@ -24,8 +33,8 @@ public class CollisionHandler : MonoBehaviour
 
     void StartCrashSequence()
     {
-        // TODO: Add SFX upon crash
         // TODO: Add particle effect upon crash
+        audioSource.PlayOneShot(rocketCrash);
         GetComponent<Movement>().enabled = false;
         Invoke("ReloadLevel", delayBeforeAction);
     }
@@ -38,8 +47,8 @@ public class CollisionHandler : MonoBehaviour
 
     void StartLoadNextLevel()
     {
-        // TODO: Add SFX upon success
         // TODO: Add particle effect upon success
+        audioSource.PlayOneShot(landingSuccess);
         GetComponent<Movement>().enabled = false;
         Invoke("LoadNextLevel", delayBeforeAction);
     }
